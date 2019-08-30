@@ -6,5 +6,6 @@ class CreateTask < ActiveRecord::Migration[5.2]
       col.string :text
       col.integer :board_id
       col.integer :user_id
+    end
   end
 end

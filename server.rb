@@ -7,7 +7,11 @@ require './lib/task'
 
 class Server < Sinatra::Base
     get '/' do
-        erb :index, :locals => { tasks: Task.all }
+        erb :boards, :locals => { boards: Board.all }
     end
 
+    post "/boards" do
+        Board.create(title: params['title'])
+        erb :boards, :locals => {boards: Board.all}
+    end
 end
