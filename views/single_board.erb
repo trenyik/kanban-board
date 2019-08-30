@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
+<title>Nikolett and Joseph's Kanban Board</title>
+</head>
+
+<body>
+    <h1>Kanban Board</h1>
+    <section class="dt dt--fixed">
+        <h2>This is Board <%= matching_board.id %></h2>
+        <section class="dtc tc pv4 bg-light-blue vh-80">
+            <form action="/tasks/add" method="post">
+            <ul id="to-do" class="list pl0 ml0 center mw6 ba b--light-silver br2"></ul>
+            <input name="text" type="text" placeholder="Enter a task" />
+            <input name="status" value="pending" type="hidden" />
+            <input name="colname" value="todo" type="hidden" />
+            <input name="board_id" value="<%= matching_board.id %>" type="hidden" />
+            <input name="user_id" value=" "type="hidden" />
+            <button type="submit">Add</button>
+            </form>
+        </section>
+        <section class="dtc tc pv4 bg-pink vh-80">
+            <ul id="doing" class="list pl0 ml0 center mw6 ba b--light-silver br2"></ul>
+            <input name="task" type="text" placeholder="Enter a task" />
+            <input name="status" value="pending" type="hidden" />
+            <input name="colname" value="doing" type="hidden" />
+            <input name="board_id" value="<%= matching_board.id %>" type="hidden" />
+            <button type="submit">Add</button>
+        </section>
+        <section class="dtc tc pv4 bg-dark-blue vh-80">
+            <ul id="done" class="list pl0 ml0 center mw6 ba b--light-silver br2"></ul>
+            <input name="task" type="text" placeholder="Enter a task" />
+            <input name="status" value="pending" type="hidden" />
+            <input name="colname" value="done" type="hidden" />
+            <input name="board_id" value="<%= matching_board.id %>" type="hidden" />
+            <button type="submit">Add</button>
+        </section>
+    </section>
+</body>
+
+<footer>
+</footer>
+
+</html>
