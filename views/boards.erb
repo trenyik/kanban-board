@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
+        <title>Nikolett and Joseph's Kanban Board</title>
+    </head>
+    <body>
+        <main>
+            <%boards.each do |board|%>
+                <a class="h3 w3 dib ma2 bg-dark-blue white br2" href="/board/<%=board.id%>"><%=board.title%></a>
+            <%end%>
+            <a class="h5 w5 dib ma2 bg-dark-blue white br2 pa2">
+                <form method="POST" action="/boards">
+                    <input name="title" required/>
+                    <button type="submit" class="bg-white ba1 pa2 dark-blue">Add Board</button>
+                </form>
+            </a>
+        </main>
+    </body>
+</html>
