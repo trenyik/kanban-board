@@ -3,6 +3,9 @@
 
 <head>
 <link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+    crossorigin="anonymous"></script>
 <title>Nikolett and Joseph's Kanban Board</title>
 </head>
 
@@ -12,7 +15,7 @@
         <h2>This is Board <%= matching_board.id %></h2>
         <section class="dtc tc pv4 bg-light-blue vh-80">
             <form action="/tasks/add" method="post">
-            <ul id="to-do" class="list pl0 ml0 center mw6 ba b--light-silver br2"></ul>
+            <ul id="to-do" class="list pl0 ml0 center mw6 ba b--light-silver br2 overflow-scroll"></ul>
             <input name="text" type="text" placeholder="Enter a task" />
             <input name="status" value="pending" type="hidden" />
             <input name="colname" value="todo" type="hidden" />
@@ -22,22 +25,47 @@
             </form>
         </section>
         <section class="dtc tc pv4 bg-pink vh-80">
-            <ul id="doing" class="list pl0 ml0 center mw6 ba b--light-silver br2"></ul>
-            <input name="task" type="text" placeholder="Enter a task" />
+            <ul id="doing" class="list pl0 ml0 center mw6 ba b--light-silver br2 overflow-scroll"></ul>
+            <input name="text" type="text" placeholder="Enter a task" />
             <input name="status" value="pending" type="hidden" />
             <input name="colname" value="doing" type="hidden" />
             <input name="board_id" value="<%= matching_board.id %>" type="hidden" />
             <button type="submit">Add</button>
         </section>
         <section class="dtc tc pv4 bg-dark-blue vh-80">
-            <ul id="done" class="list pl0 ml0 center mw6 ba b--light-silver br2"></ul>
-            <input name="task" type="text" placeholder="Enter a task" />
+            <ul id="done" class="list pl0 ml0 center mw6 ba b--light-silver br2 overflow-scroll"></ul>
+            <input name="text" type="text" placeholder="Enter a task" />
             <input name="status" value="pending" type="hidden" />
             <input name="colname" value="done" type="hidden" />
             <input name="board_id" value="<%= matching_board.id %>" type="hidden" />
             <button type="submit">Add</button>
         </section>
     </section>
+    <script>
+        const ws = new WebSocket("ws://localhost:9292/board/<%= matching_board.id %>/socket")
+
+
+        function addText(textData) {
+            const [id,status,text,user_id] = textData.split("|")
+            console.log({id,status,text,user_id})
+            $(`#${status}`).append(`<p class="pa3 ma2 br4" id="${id}">${text}</p>`)
+            const messages = document.getElementById(status)
+            messages.scrollIntoView({block: "end"})
+        }
+
+        ws.onmessage = function (text) {
+            addText(text.data)
+        }
+        
+
+        $('form').on("submit", e => {
+            e.preventDefault()
+            const text = $('input').val()
+            $('input').val("").focus()
+            ws.send(`create<*><%= matching_board.id %>|${text}|1`)
+        })
+
+    </script>
 </body>
 
 <footer>
